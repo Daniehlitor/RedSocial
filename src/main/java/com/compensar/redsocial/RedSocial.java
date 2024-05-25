@@ -3,7 +3,8 @@
  */
 package com.compensar.redsocial;
 
-import Classes.Estado;
+import com.compensar.redsocial.classes.Estado;
+import com.compensar.redsocial.swing.InicioSesionScreen;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -25,6 +26,8 @@ public class RedSocial {
                 System.out.println("descripcion: " + estado.getDescription());
             }
             System.out.println("------------------------------------------------");
+            InicioSesionScreen.main(args);
+            
         } catch (SQLException e) {
             System.out.println(e);
         }

@@ -40,9 +40,11 @@ public class DBConnection {
     }
 
     public static Statement getStatement() throws SQLException {
+        if (connection == null) {
+            connect();
+        }
         statement = connection.createStatement();
         return statement;
     }
 
-    
 }
