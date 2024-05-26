@@ -4,6 +4,10 @@
  */
 package com.compensar.redsocial.swing;
 
+import com.compensar.redsocial.RedSocial;
+import com.compensar.redsocial.classes.Usuario;
+import java.sql.SQLException;
+
 /**
  *
  * @author LENOVO
@@ -14,7 +18,12 @@ public class PublicacionesScreen extends javax.swing.JFrame {
      * Creates new form pantallaInicial
      */
     public PublicacionesScreen() {
-        initComponents();
+        try {
+            initComponents();
+            BienvenidaLable.setText("¡Bienvenido " + RedSocial.getLoggedUser().getNombre() + "!");
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
     }
 
     /**
@@ -28,7 +37,9 @@ public class PublicacionesScreen extends javax.swing.JFrame {
 
         Body = new javax.swing.JPanel();
         Header = new javax.swing.JPanel();
-        Titulo = new javax.swing.JLabel();
+        TituloLable = new javax.swing.JLabel();
+        BienvenidaLable = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         ScrollContent = new javax.swing.JScrollPane();
         Content = new javax.swing.JPanel();
         Publicacion = new javax.swing.JPanel();
@@ -46,9 +57,20 @@ public class PublicacionesScreen extends javax.swing.JFrame {
 
         Header.setBackground(new java.awt.Color(107, 20, 166));
 
-        Titulo.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 48)); // NOI18N
-        Titulo.setForeground(new java.awt.Color(255, 255, 255));
-        Titulo.setText("ChirpHub");
+        TituloLable.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 48)); // NOI18N
+        TituloLable.setForeground(new java.awt.Color(255, 255, 255));
+        TituloLable.setText("ChirpHub");
+
+        BienvenidaLable.setForeground(new java.awt.Color(255, 255, 255));
+        BienvenidaLable.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        BienvenidaLable.setText("¡Bienvenido Usuario!");
+
+        jButton1.setText("Cerrar Sesión");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout HeaderLayout = new javax.swing.GroupLayout(Header);
         Header.setLayout(HeaderLayout);
@@ -56,15 +78,25 @@ public class PublicacionesScreen extends javax.swing.JFrame {
             HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(HeaderLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(503, Short.MAX_VALUE))
+                .addComponent(TituloLable, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(BienvenidaLable, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
         HeaderLayout.setVerticalGroup(
             HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(HeaderLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(TituloLable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(HeaderLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BienvenidaLable, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         Publicacion.setBackground(new java.awt.Color(255, 255, 255));
@@ -177,7 +209,7 @@ public class PublicacionesScreen extends javax.swing.JFrame {
             .addGroup(BodyLayout.createSequentialGroup()
                 .addGap(150, 150, 150)
                 .addComponent(ScrollContent, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(150, 150, 150))
         );
         BodyLayout.setVerticalGroup(
             BodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,6 +237,17 @@ public class PublicacionesScreen extends javax.swing.JFrame {
     private void BotonPublicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonPublicarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BotonPublicarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            // TODO add your handling code here:
+            Usuario.logout();
+            new InicioSesionScreen().setVisible(true);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -243,6 +286,7 @@ public class PublicacionesScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel BienvenidaLable;
     private javax.swing.JPanel Body;
     private javax.swing.JButton BotonPublicar;
     private javax.swing.JPanel Content;
@@ -255,6 +299,7 @@ public class PublicacionesScreen extends javax.swing.JFrame {
     private javax.swing.JTextArea PublicacionTextArea;
     private javax.swing.JScrollPane ScrollContent;
     private javax.swing.JScrollPane ScrollTextArea;
-    private javax.swing.JLabel Titulo;
+    private javax.swing.JLabel TituloLable;
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }

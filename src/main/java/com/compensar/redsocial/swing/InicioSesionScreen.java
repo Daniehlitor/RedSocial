@@ -4,6 +4,11 @@
  */
 package com.compensar.redsocial.swing;
 
+import com.compensar.redsocial.RedSocial;
+import com.compensar.redsocial.classes.Usuario;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author LENOVO
@@ -236,6 +241,32 @@ public class InicioSesionScreen extends javax.swing.JFrame {
 
     private void IniciarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarButtonActionPerformed
         // TODO add your handling code here:
+        String email = EmailTextfield.getText();
+        char[] contrasena = ContrasenaPasswordField.getPassword();
+
+        try {
+            boolean form_val = RedSocial.validateEmptyString(
+                    new String[]{email, new String(contrasena)}
+            );
+
+            if (!form_val) {
+                RedSocial.showMessage(
+                        "Error",
+                        "Debes ingresar todos los datos",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            boolean continuar = Usuario.login(email, new String(contrasena));
+            if (continuar) {
+                PublicacionesScreen publicacionSn = new PublicacionesScreen();
+                publicacionSn.setVisible(true);
+                this.setVisible(false);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }//GEN-LAST:event_IniciarButtonActionPerformed
 
     private void RegistrarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarButtonActionPerformed
