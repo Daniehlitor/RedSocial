@@ -32,7 +32,7 @@ public class PublicacionComponent extends JPanel {
         PublicacionDate.setText("Publicado en " + publicacion.getDate());
 
         PublicacionLikes.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
-        PublicacionLikes.setText(publicacion.getLikes() + " likes");
+        PublicacionLikes.setText("");
 
         PublicacionUsuario.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         PublicacionUsuario.setText(publicacion.getUsuario().getNombre());
