@@ -6,7 +6,11 @@ package com.compensar.redsocial.swing;
 
 import com.compensar.redsocial.RedSocial;
 import com.compensar.redsocial.classes.Usuario;
+import com.compensar.redsocial.classes.Publicacion;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,6 +25,22 @@ public class PublicacionesScreen extends javax.swing.JFrame {
         try {
             initComponents();
             BienvenidaLable.setText("¡Bienvenido " + RedSocial.getLoggedUser().getNombre() + "!");
+            setPublicaciones();
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    private void setPublicaciones() {
+        try {
+            ArrayList<Publicacion> publicaciones = Publicacion.getPublicaciones();
+
+            for (Publicacion publicacion : publicaciones) {
+                System.out.println(publicacion.getContenido());
+                PublicacionComponent component = new PublicacionComponent(publicacion);
+                component.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+                PublicacionesPanel.add(component);
+            }
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -39,17 +59,14 @@ public class PublicacionesScreen extends javax.swing.JFrame {
         Header = new javax.swing.JPanel();
         TituloLable = new javax.swing.JLabel();
         BienvenidaLable = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        LogOutButton = new javax.swing.JButton();
         ScrollContent = new javax.swing.JScrollPane();
         Content = new javax.swing.JPanel();
-        Publicacion = new javax.swing.JPanel();
-        PublicacionText = new javax.swing.JLabel();
-        PublicacionDate = new javax.swing.JLabel();
-        PublicacionLikes = new javax.swing.JLabel();
         NuevaPublicacion = new javax.swing.JPanel();
         BotonPublicar = new javax.swing.JButton();
         ScrollTextArea = new javax.swing.JScrollPane();
         PublicacionTextArea = new javax.swing.JTextArea();
+        PublicacionesPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,10 +82,10 @@ public class PublicacionesScreen extends javax.swing.JFrame {
         BienvenidaLable.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         BienvenidaLable.setText("¡Bienvenido Usuario!");
 
-        jButton1.setText("Cerrar Sesión");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        LogOutButton.setText("Cerrar Sesión");
+        LogOutButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                LogOutButtonActionPerformed(evt);
             }
         });
 
@@ -82,8 +99,8 @@ public class PublicacionesScreen extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(BienvenidaLable, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addContainerGap())
+                .addComponent(LogOutButton)
+                .addGap(14, 14, 14))
         );
         HeaderLayout.setVerticalGroup(
             HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,45 +112,8 @@ public class PublicacionesScreen extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BienvenidaLable, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(LogOutButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        Publicacion.setBackground(new java.awt.Color(255, 255, 255));
-
-        PublicacionText.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        PublicacionText.setText("lorem ipsum");
-
-        PublicacionDate.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
-        PublicacionDate.setText("Publicado hace 12min");
-
-        PublicacionLikes.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
-        PublicacionLikes.setText("2 likes");
-
-        javax.swing.GroupLayout PublicacionLayout = new javax.swing.GroupLayout(Publicacion);
-        Publicacion.setLayout(PublicacionLayout);
-        PublicacionLayout.setHorizontalGroup(
-            PublicacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PublicacionLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(PublicacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(PublicacionText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(PublicacionLayout.createSequentialGroup()
-                        .addComponent(PublicacionDate)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 262, Short.MAX_VALUE)
-                        .addComponent(PublicacionLikes)))
-                .addGap(15, 15, 15))
-        );
-        PublicacionLayout.setVerticalGroup(
-            PublicacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PublicacionLayout.createSequentialGroup()
-                .addGap(9, 9, 9)
-                .addComponent(PublicacionText, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
-                .addGroup(PublicacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(PublicacionDate)
-                    .addComponent(PublicacionLikes))
-                .addGap(9, 9, 9))
         );
 
         BotonPublicar.setBackground(new java.awt.Color(107, 20, 166));
@@ -150,18 +130,23 @@ public class PublicacionesScreen extends javax.swing.JFrame {
         PublicacionTextArea.setRows(5);
         ScrollTextArea.setViewportView(PublicacionTextArea);
 
+        PublicacionesPanel.setLayout(new javax.swing.BoxLayout(PublicacionesPanel, javax.swing.BoxLayout.Y_AXIS));
+
         javax.swing.GroupLayout NuevaPublicacionLayout = new javax.swing.GroupLayout(NuevaPublicacion);
         NuevaPublicacion.setLayout(NuevaPublicacionLayout);
         NuevaPublicacionLayout.setHorizontalGroup(
             NuevaPublicacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, NuevaPublicacionLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
+            .addGroup(NuevaPublicacionLayout.createSequentialGroup()
                 .addGroup(NuevaPublicacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(ScrollTextArea, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(NuevaPublicacionLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(BotonPublicar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(15, 15, 15))
+                        .addContainerGap()
+                        .addComponent(PublicacionesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, NuevaPublicacionLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(NuevaPublicacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(BotonPublicar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ScrollTextArea, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 0, 0))
         );
         NuevaPublicacionLayout.setVerticalGroup(
             NuevaPublicacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,7 +155,9 @@ public class PublicacionesScreen extends javax.swing.JFrame {
                 .addComponent(ScrollTextArea, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(BotonPublicar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(PublicacionesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
 
         javax.swing.GroupLayout ContentLayout = new javax.swing.GroupLayout(Content);
@@ -178,13 +165,8 @@ public class PublicacionesScreen extends javax.swing.JFrame {
         ContentLayout.setHorizontalGroup(
             ContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ContentLayout.createSequentialGroup()
-                .addGroup(ContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(ContentLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(NuevaPublicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(ContentLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(Publicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(5, 5, 5)
+                .addComponent(NuevaPublicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
         ContentLayout.setVerticalGroup(
@@ -192,12 +174,8 @@ public class PublicacionesScreen extends javax.swing.JFrame {
             .addGroup(ContentLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(NuevaPublicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
-                .addComponent(Publicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
-
-        Publicacion.getAccessibleContext().setAccessibleName("");
 
         ScrollContent.setViewportView(Content);
 
@@ -208,23 +186,25 @@ public class PublicacionesScreen extends javax.swing.JFrame {
             .addComponent(Header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(BodyLayout.createSequentialGroup()
                 .addGap(150, 150, 150)
-                .addComponent(ScrollContent, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(150, 150, 150))
+                .addComponent(ScrollContent, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(130, Short.MAX_VALUE))
         );
         BodyLayout.setVerticalGroup(
             BodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BodyLayout.createSequentialGroup()
                 .addComponent(Header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addComponent(ScrollContent, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addComponent(ScrollContent, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Body, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(Body, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -236,9 +216,26 @@ public class PublicacionesScreen extends javax.swing.JFrame {
 
     private void BotonPublicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonPublicarActionPerformed
         // TODO add your handling code here:
+        try {
+            String contenido = PublicacionTextArea.getText();
+            if (RedSocial.validateEmptyString(new String[]{contenido})) {
+                PublicacionesPanel.removeAll();
+                Publicacion.crearPublicacion(contenido);
+                PublicacionTextArea.setText("");
+                this.setPublicaciones();
+            } else {
+                RedSocial.showMessage(
+                        "Error",
+                        "La publicacion no tiene contenido",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }//GEN-LAST:event_BotonPublicarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutButtonActionPerformed
         try {
             // TODO add your handling code here:
             Usuario.logout();
@@ -247,7 +244,7 @@ public class PublicacionesScreen extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_LogOutButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -291,15 +288,12 @@ public class PublicacionesScreen extends javax.swing.JFrame {
     private javax.swing.JButton BotonPublicar;
     private javax.swing.JPanel Content;
     private javax.swing.JPanel Header;
+    private javax.swing.JButton LogOutButton;
     private javax.swing.JPanel NuevaPublicacion;
-    private javax.swing.JPanel Publicacion;
-    private javax.swing.JLabel PublicacionDate;
-    private javax.swing.JLabel PublicacionLikes;
-    private javax.swing.JLabel PublicacionText;
     private javax.swing.JTextArea PublicacionTextArea;
+    private javax.swing.JPanel PublicacionesPanel;
     private javax.swing.JScrollPane ScrollContent;
     private javax.swing.JScrollPane ScrollTextArea;
     private javax.swing.JLabel TituloLable;
-    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }
